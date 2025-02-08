@@ -532,14 +532,14 @@ func (c *KcpConnection) finalizer() {
 
 func (c *KcpConnection) callOnConnStart() {
 	if c.onConnStart != nil {
-		glog.Ins().DebugF("ZINX CallOnConnStart....")
+		glog.Ins().DebugF("GTCP CallOnConnStart....")
 		c.onConnStart(c)
 	}
 }
 
 func (c *KcpConnection) callOnConnStop() {
 	if c.onConnStop != nil {
-		glog.Ins().DebugF("ZINX CallOnConnStop....")
+		glog.Ins().DebugF("GTCP CallOnConnStop....")
 		c.onConnStop(c)
 	}
 }

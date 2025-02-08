@@ -54,7 +54,7 @@ func NewClient(ip string, port int, opts ...ClientOption) giface.IClient {
 	c := &Client{
 		// Default name, can be modified using the WithNameClient Option
 		// (默认名称，可以使用WithNameClient的Option修改)
-		Name: "ZinxClientTcp",
+		Name: "GtcpClientTcp",
 		Ip:   ip,
 		Port: port,
 

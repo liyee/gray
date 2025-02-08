@@ -538,14 +538,14 @@ func (c *WsConnection) finalizer() {
 
 func (c *WsConnection) callOnConnStart() {
 	if c.onConnStart != nil {
-		glog.Ins().InfoF("ZINX CallOnConnStart....")
+		glog.Ins().InfoF("GTCP CallOnConnStart....")
 		c.onConnStart(c)
 	}
 }
 
 func (c *WsConnection) callOnConnStop() {
 	if c.onConnStop != nil {
-		glog.Ins().InfoF("ZINX CallOnConnStop....")
+		glog.Ins().InfoF("GTCP CallOnConnStop....")
 		c.onConnStop(c)
 	}
 }

@@ -138,7 +138,7 @@ func (c *Config) Show() {
 	objVal := reflect.ValueOf(c).Elem()
 	objType := reflect.TypeOf(*c)
 
-	fmt.Println("===== Zinx Global Config =====")
+	fmt.Println("===== Gtcp Global Config =====")
 	for i := 0; i < objVal.NumField(); i++ {
 		field := objVal.Field(i)
 		typeField := objType.Field(i)

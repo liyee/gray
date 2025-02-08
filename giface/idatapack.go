@@ -7,7 +7,7 @@ type IDataPack interface {
 }
 
 const (
-	// Zinx standard packing and unpacking method (Zinx 标准封包和拆包方式)
+	// Gtcp standard packing and unpacking method (Gtcp 标准封包和拆包方式)
 	GtcpDataPack    string = "gtcp_pack_tlv_big_endian"
 	GtcpDataPackOld string = "gtcp_pack_ltv_little_endian"
 
@@ -16,6 +16,6 @@ const (
 )
 
 const (
-	// Zinx default standard message protocol format(Zinx 默认标准报文协议格式)
+	// Gtcp default standard message protocol format(Gtcp 默认标准报文协议格式)
 	GtcpMessage string = "gtcp_message"
 )
