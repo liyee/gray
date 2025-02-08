@@ -1,6 +1,7 @@
 package gnet
 
 import (
+	"bufio"
 	"context"
 	"encoding/hex"
 	"errors"
@@ -21,6 +22,7 @@ import (
 
 type Connection struct {
 	conn       net.Conn
+	bufWriter  *bufio.Writer
 	connID     uint64
 	connIdStr  string
 	workerID   uint32
@@ -318,6 +320,13 @@ func (c *Connection) RemoteAddr() net.Addr {
 
 func (c *Connection) LocalAddr() net.Addr {
 	return c.conn.LocalAddr()
+}
+
+func (c *Connection) Flush() error {
+	if c.isClosed() == true {
+		return errors.New("connection closed when flush data")
+	}
+	return c.bufWriter.Flush()
 }
 
 func (c *Connection) Send(data []byte) error {

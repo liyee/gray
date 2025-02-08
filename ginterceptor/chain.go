@@ -18,22 +18,20 @@ func NewChain(list []giface.IInterceptor, pos int, req giface.IcReq) giface.ICha
 	}
 }
 
-func (c *Chain) ShouldIRequest(icReq giface.IcReq) giface.IRequest {
-	if icReq == nil {
-		return nil
-	}
-
-	switch icReq.(type) {
-	case giface.IRequest:
-		return icReq.(giface.IRequest)
-	default:
-		return nil
-	}
-}
-
 func (c *Chain) Request() giface.IcReq {
 	return c.req
 }
+
+func (c *Chain) Proceed(request giface.IcReq) giface.IcResp {
+	if c.position < len(c.interceptor) {
+		chain := NewChain(c.interceptor, c.position+1, request)
+		interceptor := c.interceptor[c.position]
+		response := interceptor.Intercept(chain)
+		return response
+	}
+	return request
+}
+
 func (c *Chain) GetIMessage() giface.IMessage {
 	req := c.Request()
 	if req == nil {
@@ -46,15 +44,6 @@ func (c *Chain) GetIMessage() giface.IMessage {
 	}
 
 	return iRequest.GetMessage()
-}
-func (c *Chain) Proceed(request giface.IcReq) giface.IcResp {
-	if c.position < len(c.interceptor) {
-		chain := NewChain(c.interceptor, c.position+1, request)
-		interceptor := c.interceptor[c.position]
-		response := interceptor.Intercept(chain)
-		return response
-	}
-	return request
 }
 
 func (c *Chain) ProceedWithIMessage(iMessage giface.IMessage, response giface.IcReq) giface.IcResp {
@@ -75,4 +64,17 @@ func (c *Chain) ProceedWithIMessage(iMessage giface.IMessage, response giface.Ic
 	iRequest.SetResPonse(response)
 
 	return c.Proceed(iRequest)
+}
+
+func (c *Chain) ShouldIRequest(icReq giface.IcReq) giface.IRequest {
+	if icReq == nil {
+		return nil
+	}
+
+	switch icReq.(type) {
+	case giface.IRequest:
+		return icReq.(giface.IRequest)
+	default:
+		return nil
+	}
 }

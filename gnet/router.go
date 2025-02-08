@@ -9,9 +9,9 @@ import (
 
 type BaseRouter struct{}
 
-func (br *BaseRouter) PreHandle(request giface.IRequest)     {}
-func (br *BaseRouter) Handle(request giface.IRequest)        {}
-func (br *BaseRouter) PostPreHandle(request giface.IRequest) {}
+func (br *BaseRouter) PreHandle(request giface.IRequest)  {}
+func (br *BaseRouter) Handle(request giface.IRequest)     {}
+func (br *BaseRouter) PostHandle(request giface.IRequest) {}
 
 type RouterSlices struct {
 	Apis     map[uint32][]giface.RouterHandler

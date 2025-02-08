@@ -103,6 +103,7 @@ func freeWorker(conn giface.IConnection) {
 		mh.freeWorkers[conn.GetWorkerID()] = struct{}{}
 	}
 }
+
 func (mh *MsgHandler) Intercept(chain giface.IChain) giface.IcResp {
 	request := chain.Request()
 	if request != nil {

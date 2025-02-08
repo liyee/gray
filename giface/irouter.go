@@ -5,7 +5,7 @@ type RouterHandler func(request IRequest)
 type IRouter interface {
 	PreHandle(request IRequest)
 	Handle(request IRequest)
-	PostPreHandle(request IRequest)
+	PostHandle(request IRequest)
 }
 
 type IRouterSlices interface {

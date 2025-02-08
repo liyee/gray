@@ -57,31 +57,6 @@ func NewFrameDecoderByParams(maxFrameLength uint64, lengthFieldOffset, lengthFie
 
 func (d *FrameDecoder) fail(frameLength int64) {}
 
-func (d *FrameDecoder) failIfNecessary(firstDetectionOfTooLongFrame bool) {
-	if d.bytesToDiscard == 0 {
-		// Indicates that the data to be discarded has been discarded (说明需要丢弃的数据已经丢弃完成)
-		// Save the length of the discarded data packet (保存一下被丢弃的数据包长度)
-		tooLongFrameLength := d.tooLongFrameLength
-		d.tooLongFrameLength = 0
-
-		// Turn off discard mode (关闭丢弃模式)
-		d.discardingTooLongFrame = false
-
-		// failFast: Default is true (failFast：默认true)
-		// firstDetectionOfTooLongFrame: Passed in as true (firstDetectionOfTooLongFrame：传入true)
-		if !d.failFast || firstDetectionOfTooLongFrame {
-			// Fast failure (快速失败)
-			d.fail(tooLongFrameLength)
-		}
-	} else {
-		// Indicates that the discard has not been completed yet (说明还未丢弃完成)
-		if d.failFast && firstDetectionOfTooLongFrame {
-			// Fast failure (快速失败)
-			d.fail(d.tooLongFrameLength)
-		}
-	}
-}
-
 func (d *FrameDecoder) discardingTooLongFrameFunc(buffer *bytes.Buffer) {
 	// Save the number of bytes still to be discarded
 	// (保存还需丢弃多少字节)
@@ -145,6 +120,36 @@ func (d *FrameDecoder) getUnadjustedFrameLength(buf *bytes.Buffer, offset int, l
 		panic(fmt.Sprintf("unsupported LengthFieldLength: %d (expected: 1, 2, 3, 4, or 8)", d.LengthFieldLength))
 	}
 	return frameLength
+}
+
+func (d *FrameDecoder) failOnNegativeLengthField(in *bytes.Buffer, frameLength int64, lengthFieldEndOffset int) {
+	in.Next(lengthFieldEndOffset)
+	panic(fmt.Sprintf("negative pre-adjustment length field: %d", frameLength))
+}
+
+func (d *FrameDecoder) failIfNecessary(firstDetectionOfTooLongFrame bool) {
+	if d.bytesToDiscard == 0 {
+		// Indicates that the data to be discarded has been discarded (说明需要丢弃的数据已经丢弃完成)
+		// Save the length of the discarded data packet (保存一下被丢弃的数据包长度)
+		tooLongFrameLength := d.tooLongFrameLength
+		d.tooLongFrameLength = 0
+
+		// Turn off discard mode (关闭丢弃模式)
+		d.discardingTooLongFrame = false
+
+		// failFast: Default is true (failFast：默认true)
+		// firstDetectionOfTooLongFrame: Passed in as true (firstDetectionOfTooLongFrame：传入true)
+		if !d.failFast || firstDetectionOfTooLongFrame {
+			// Fast failure (快速失败)
+			d.fail(tooLongFrameLength)
+		}
+	} else {
+		// Indicates that the discard has not been completed yet (说明还未丢弃完成)
+		if d.failFast && firstDetectionOfTooLongFrame {
+			// Fast failure (快速失败)
+			d.fail(d.tooLongFrameLength)
+		}
+	}
 }
 
 func (d *FrameDecoder) exceededFrameLength(in *bytes.Buffer, frameLength int64) {
@@ -287,9 +292,4 @@ func (d *FrameDecoder) Decode(buff []byte) [][]byte {
 			return resp
 		}
 	}
-}
-
-func (d *FrameDecoder) failOnNegativeLengthField(in *bytes.Buffer, frameLength int64, lengthFieldEndOffset int) {
-	in.Next(lengthFieldEndOffset)
-	panic(fmt.Sprintf("negative pre-adjustment length field: %d", frameLength))
 }

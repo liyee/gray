@@ -69,6 +69,7 @@ func GetRequest(conn giface.IConnection, msg giface.IMessage) giface.IRequest {
 	}
 	return NewRequest(conn, msg)
 }
+
 func PutRequest(request giface.IRequest) {
 	// 判断是否开启了对象池模式
 	if gconf.GlobalObject.RequestPoolMode {
@@ -92,6 +93,7 @@ func (r *Request) Reset(conn giface.IConnection, msg giface.IMessage) {
 	r.index = -1
 	r.keys = nil
 }
+
 func (r *Request) Copy() giface.IRequest {
 	// 构造一个新的 Request 对象，复制部分原始对象的参数,但是复制的 Request 不应该再对原始连接操作,所以不含有连接参数
 	// 同理也不应该再执行路由方法,路由函数也不包含
@@ -122,4 +124,106 @@ func (r *Request) Copy() giface.IRequest {
 	newRequest.msg = gpack.NewMessageByMsgID(r.msg.GetMsgID(), r.msg.GetDataLen(), r.msg.GetRawData())
 
 	return newRequest
+}
+
+// Set 在 Request 中存放一个上下文，如果 keys 为空会实例化一个
+func (r *Request) Set(key string, value interface{}) {
+	r.stepLock.Lock()
+	if r.keys == nil {
+		r.keys = make(map[string]interface{})
+	}
+
+	r.keys[key] = value
+	r.stepLock.Unlock()
+}
+
+// Get 在 Request 中取出一个上下文信息
+func (r *Request) Get(key string) (value interface{}, exists bool) {
+	r.stepLock.RLock()
+	value, exists = r.keys[key]
+	r.stepLock.RUnlock()
+	return
+}
+
+func (r *Request) GetMessage() giface.IMessage {
+	return r.msg
+}
+
+func (r *Request) GetConnection() giface.IConnection {
+	return r.conn
+}
+
+func (r *Request) GetData() []byte {
+	return r.msg.GetData()
+}
+
+func (r *Request) GetMsgID() uint32 {
+	return r.msg.GetMsgID()
+}
+
+func (r *Request) BindRouter(router giface.IRouter) {
+	r.router = router
+}
+
+func (r *Request) next() {
+	if r.needNext == false {
+		r.needNext = true
+		return
+	}
+
+	r.stepLock.Lock()
+	r.steps++
+	r.stepLock.Unlock()
+}
+
+func (r *Request) Goto(step giface.HandleStep) {
+	r.stepLock.Lock()
+	r.steps = step
+	r.needNext = false
+	r.stepLock.Unlock()
+}
+
+func (r *Request) Call() {
+
+	if r.router == nil {
+		return
+	}
+
+	for r.steps < HANDLE_OVER {
+		switch r.steps {
+		case PRE_HANDLE:
+			r.router.PreHandle(r)
+		case HANDLE:
+			r.router.Handle(r)
+		case POST_HANDLE:
+			r.router.PostHandle(r)
+		}
+
+		r.next()
+	}
+
+	r.steps = PRE_HANDLE
+}
+
+func (r *Request) Abort() {
+	if gconf.GlobalObject.RouterSlicesMode {
+		r.index = int8(len(r.handlers))
+	} else {
+		r.stepLock.Lock()
+		r.steps = HANDLE_OVER
+		r.stepLock.Unlock()
+	}
+}
+
+// BindRouterSlices New version
+func (r *Request) BindRouterSlices(handlers []giface.RouterHandler) {
+	r.handlers = handlers
+}
+
+func (r *Request) RouterSlicesNext() {
+	r.index++
+	for r.index < int8(len(r.handlers)) {
+		r.handlers[r.index](r)
+		r.index++
+	}
 }
