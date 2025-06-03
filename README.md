@@ -1,2 +1,2 @@
-# gtcp
+# gray
 A go language game framework
