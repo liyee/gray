@@ -7,7 +7,7 @@ import (
 	"math"
 	"sync"
 
-	"github.com/liyee/gtcp/giface"
+	"github.com/liyee/gray/giface"
 )
 
 type FrameDecoder struct {

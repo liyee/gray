@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/liyee/gtcp/gconf"
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/glog"
+	"github.com/liyee/gray/gconf"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/glog"
 )
 
 const (

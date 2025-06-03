@@ -13,12 +13,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/liyee/gtcp/gconf"
-	"github.com/liyee/gtcp/gdecoder"
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/glog"
-	"github.com/liyee/gtcp/gpack"
-	"github.com/liyee/gtcp/logo"
+	"github.com/liyee/gray/gconf"
+	"github.com/liyee/gray/gdecoder"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/glog"
+	"github.com/liyee/gray/gpack"
+	"github.com/liyee/gray/logo"
 
 	"github.com/gorilla/websocket"
 	"github.com/xtaci/kcp-go"
@@ -106,7 +106,7 @@ func newServerWithConfig(config *gconf.Config, ipVersion string, opts ...Option)
 		exitChan:         nil,
 		// Default to using Zinx's TLV data pack format
 		// (默认使用zinx的TLV封包方式)
-		packet:  gpack.Factory().NewPack(giface.GtcpDataPack),
+		packet:  gpack.Factory().NewPack(giface.GrayDataPack),
 		decoder: gdecoder.NewTLVDecoder(), // Default to using TLV decode (默认使用TLV的解码方式)
 		upgrader: &websocket.Upgrader{
 			ReadBufferSize: int(config.IOReadBuffSize),

@@ -3,7 +3,7 @@ package gpack
 import (
 	"sync"
 
-	"github.com/liyee/gtcp/giface"
+	"github.com/liyee/gray/giface"
 )
 
 var pack_once sync.Once
@@ -26,9 +26,9 @@ func (f *pack_factory) NewPack(kind string) giface.IDataPack {
 	switch kind {
 	// Zinx standard default packaging and unpackaging method
 	// (Zinx 标准默认封包拆包方式)
-	case giface.GtcpDataPack:
+	case giface.GrayDataPack:
 		dataPack = NewDataPack()
-	case giface.GtcpDataPackOld:
+	case giface.GrayDataPackOld:
 		dataPack = NewDataPackLtv()
 		// case for custom packaging and unpackaging methods
 		// (case 自定义封包拆包方式case)

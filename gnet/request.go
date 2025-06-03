@@ -4,9 +4,9 @@ import (
 	"math"
 	"sync"
 
-	"github.com/liyee/gtcp/gconf"
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/gpack"
+	"github.com/liyee/gray/gconf"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/gpack"
 )
 
 const (

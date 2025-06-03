@@ -6,11 +6,11 @@ import (
 	"net"
 	"time"
 
-	"github.com/liyee/gtcp/gconf"
-	"github.com/liyee/gtcp/gdecoder"
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/glog"
-	"github.com/liyee/gtcp/gpack"
+	"github.com/liyee/gray/gconf"
+	"github.com/liyee/gray/gdecoder"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/glog"
+	"github.com/liyee/gray/gpack"
 
 	"github.com/gorilla/websocket"
 )
@@ -54,12 +54,12 @@ func NewClient(ip string, port int, opts ...ClientOption) giface.IClient {
 	c := &Client{
 		// Default name, can be modified using the WithNameClient Option
 		// (默认名称，可以使用WithNameClient的Option修改)
-		Name: "GtcpClientTcp",
+		Name: "GrayClientTcp",
 		Ip:   ip,
 		Port: port,
 
 		msgHandler: newMsgHandler(),
-		packet:     gpack.Factory().NewPack(giface.GtcpDataPack), // Default to using Zinx's TLV packet format(默认使用zinx的TLV封包方式)
+		packet:     gpack.Factory().NewPack(giface.GrayDataPack), // Default to using Zinx's TLV packet format(默认使用zinx的TLV封包方式)
 		decoder:    gdecoder.NewTLVDecoder(),                     // Default to using Zinx's TLV decoder(默认使用zinx的TLV解码器)
 		version:    "tcp",
 		ErrChan:    make(chan error),
@@ -83,7 +83,7 @@ func NewWsClient(ip string, port int, opts ...ClientOption) giface.IClient {
 		Port: port,
 
 		msgHandler: newMsgHandler(),
-		packet:     gpack.Factory().NewPack(giface.GtcpDataPack), // Default to using Zinx's TLV packet format(默认使用zinx的TLV封包方式)
+		packet:     gpack.Factory().NewPack(giface.GrayDataPack), // Default to using Zinx's TLV packet format(默认使用zinx的TLV封包方式)
 		decoder:    gdecoder.NewTLVDecoder(),                     // Default to using Zinx's TLV decoder(默认使用zinx的TLV解码器)
 		version:    "websocket",
 		dialer:     &websocket.Dialer{},

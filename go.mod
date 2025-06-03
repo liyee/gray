@@ -1,4 +1,4 @@
-module github.com/liyee/gtcp
+module github.com/liyee/gray
 
 go 1.22.8
 

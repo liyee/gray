@@ -1,6 +1,6 @@
 package gnet
 
-import "github.com/liyee/gtcp/giface"
+import "github.com/liyee/gray/giface"
 
 type Option func(s *Server)
 

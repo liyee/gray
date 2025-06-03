@@ -1,6 +1,6 @@
 package glog
 
-var StdZinxLog = NewGtcpLog("", BitDefault)
+var StdZinxLog = NewGrayLog("", BitDefault)
 
 // Flags gets the flags of StdZinxLog
 func Flags() int {

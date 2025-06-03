@@ -3,5 +3,5 @@ package logo
 import "fmt"
 
 func PrintLogo() {
-	fmt.Println("gtcp v1.0.0")
+	fmt.Println("gray v1.0.0")
 }

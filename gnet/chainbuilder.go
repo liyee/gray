@@ -1,8 +1,8 @@
 package gnet
 
 import (
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/ginterceptor"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/ginterceptor"
 )
 
 type chainBuilder struct {

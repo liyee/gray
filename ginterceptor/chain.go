@@ -1,7 +1,7 @@
 package ginterceptor
 
 import (
-	"github.com/liyee/gtcp/giface"
+	"github.com/liyee/gray/giface"
 )
 
 type Chain struct {

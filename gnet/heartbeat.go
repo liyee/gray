@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/glog"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/glog"
 )
 
 type HeartbeatChecker struct {

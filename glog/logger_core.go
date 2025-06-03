@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/liyee/gtcp/gutils"
+	"github.com/liyee/gray/gutils"
 )
 
 const (
@@ -49,7 +49,7 @@ var levels = []string{
 	"[FATAL]",
 }
 
-type GtcpLoggerCore struct {
+type GrayLoggerCore struct {
 	// to ensure thread-safe when multiple goroutines read and write files to prevent mixed-up content, achieving concurrency safety
 	// (确保多协程读写文件，防止文件内容混乱，做到协程安全)
 	mu sync.Mutex
@@ -84,11 +84,11 @@ out: The file io for standard output
 prefix: The prefix of the log
 flag: The flag of the log header information
 */
-func NewGtcpLog(prefix string, flag int) *GtcpLoggerCore {
+func NewGrayLog(prefix string, flag int) *GrayLoggerCore {
 
 	// By default, debug is turned on, the depth is 2, and the ZinxLogger object calling the log print method can call up to two levels to reach the output function
 	// (默认 debug打开， calledDepth深度为2,ZinxLogger对象调用日志打印方法最多调用两层到达output函数)
-	zlog := &GtcpLoggerCore{prefix: prefix, flag: flag, isolationLevel: 0, calldDepth: 2}
+	zlog := &GrayLoggerCore{prefix: prefix, flag: flag, isolationLevel: 0, calldDepth: 2}
 
 	// Set the log object's resource cleanup destructor method (this is not necessary, as go's Gc will automatically collect, but for the sake of neatness)
 	// (设置log对象 回收资源 析构方法(不设置也可以，go的Gc会自动回收，强迫症没办法))
@@ -97,11 +97,11 @@ func NewGtcpLog(prefix string, flag int) *GtcpLoggerCore {
 }
 
 // CleanZinxLog Recycle log resources
-func CleanZinxLog(log *GtcpLoggerCore) {
+func CleanZinxLog(log *GrayLoggerCore) {
 	log.closeFile()
 }
 
-func (log *GtcpLoggerCore) SetLogHook(f func([]byte)) {
+func (log *GrayLoggerCore) SetLogHook(f func([]byte)) {
 	log.onLogHook = f
 }
 
@@ -113,7 +113,7 @@ file: The file name of the source code invoking the log function.
 line: The line number of the source code invoking the log function.
 level: The log level of the current log entry.
 */
-func (log *GtcpLoggerCore) formatHeader(t time.Time, file string, line int, level int) {
+func (log *GrayLoggerCore) formatHeader(t time.Time, file string, line int, level int) {
 	var buf *bytes.Buffer = &log.buf
 	// If the current prefix string is not empty, write the prefix first.
 	if log.prefix != "" {
@@ -179,7 +179,7 @@ func (log *GtcpLoggerCore) formatHeader(t time.Time, file string, line int, leve
 }
 
 // OutPut outputs log file, the original method
-func (log *GtcpLoggerCore) OutPut(level int, s string) error {
+func (log *GrayLoggerCore) OutPut(level int, s string) error {
 	now := time.Now() // get current time
 	var file string   // file name of the current caller of the log interface
 	var line int      // line number of the executed code
@@ -224,67 +224,67 @@ func (log *GtcpLoggerCore) OutPut(level int, s string) error {
 	return err
 }
 
-func (log *GtcpLoggerCore) verifyLogIsolation(logLevel int) bool {
+func (log *GrayLoggerCore) verifyLogIsolation(logLevel int) bool {
 	return log.isolationLevel > logLevel
 }
 
-func (log *GtcpLoggerCore) Debugf(format string, v ...interface{}) {
+func (log *GrayLoggerCore) Debugf(format string, v ...interface{}) {
 	if log.verifyLogIsolation(LogDebug) {
 		return
 	}
 	_ = log.OutPut(LogDebug, fmt.Sprintf(format, v...))
 }
 
-func (log *GtcpLoggerCore) Debug(v ...interface{}) {
+func (log *GrayLoggerCore) Debug(v ...interface{}) {
 	if log.verifyLogIsolation(LogDebug) {
 		return
 	}
 	_ = log.OutPut(LogDebug, fmt.Sprintln(v...))
 }
 
-func (log *GtcpLoggerCore) Infof(format string, v ...interface{}) {
+func (log *GrayLoggerCore) Infof(format string, v ...interface{}) {
 	if log.verifyLogIsolation(LogInfo) {
 		return
 	}
 	_ = log.OutPut(LogInfo, fmt.Sprintf(format, v...))
 }
 
-func (log *GtcpLoggerCore) Info(v ...interface{}) {
+func (log *GrayLoggerCore) Info(v ...interface{}) {
 	if log.verifyLogIsolation(LogInfo) {
 		return
 	}
 	_ = log.OutPut(LogInfo, fmt.Sprintln(v...))
 }
 
-func (log *GtcpLoggerCore) Warnf(format string, v ...interface{}) {
+func (log *GrayLoggerCore) Warnf(format string, v ...interface{}) {
 	if log.verifyLogIsolation(LogWarn) {
 		return
 	}
 	_ = log.OutPut(LogWarn, fmt.Sprintf(format, v...))
 }
 
-func (log *GtcpLoggerCore) Warn(v ...interface{}) {
+func (log *GrayLoggerCore) Warn(v ...interface{}) {
 	if log.verifyLogIsolation(LogWarn) {
 		return
 	}
 	_ = log.OutPut(LogWarn, fmt.Sprintln(v...))
 }
 
-func (log *GtcpLoggerCore) Errorf(format string, v ...interface{}) {
+func (log *GrayLoggerCore) Errorf(format string, v ...interface{}) {
 	if log.verifyLogIsolation(LogError) {
 		return
 	}
 	_ = log.OutPut(LogError, fmt.Sprintf(format, v...))
 }
 
-func (log *GtcpLoggerCore) Error(v ...interface{}) {
+func (log *GrayLoggerCore) Error(v ...interface{}) {
 	if log.verifyLogIsolation(LogError) {
 		return
 	}
 	_ = log.OutPut(LogError, fmt.Sprintln(v...))
 }
 
-func (log *GtcpLoggerCore) Fatalf(format string, v ...interface{}) {
+func (log *GrayLoggerCore) Fatalf(format string, v ...interface{}) {
 	if log.verifyLogIsolation(LogFatal) {
 		return
 	}
@@ -292,7 +292,7 @@ func (log *GtcpLoggerCore) Fatalf(format string, v ...interface{}) {
 	os.Exit(1)
 }
 
-func (log *GtcpLoggerCore) Fatal(v ...interface{}) {
+func (log *GrayLoggerCore) Fatal(v ...interface{}) {
 	if log.verifyLogIsolation(LogFatal) {
 		return
 	}
@@ -300,7 +300,7 @@ func (log *GtcpLoggerCore) Fatal(v ...interface{}) {
 	os.Exit(1)
 }
 
-func (log *GtcpLoggerCore) Panicf(format string, v ...interface{}) {
+func (log *GrayLoggerCore) Panicf(format string, v ...interface{}) {
 	if log.verifyLogIsolation(LogPanic) {
 		return
 	}
@@ -309,7 +309,7 @@ func (log *GtcpLoggerCore) Panicf(format string, v ...interface{}) {
 	panic(s)
 }
 
-func (log *GtcpLoggerCore) Panic(v ...interface{}) {
+func (log *GrayLoggerCore) Panic(v ...interface{}) {
 	if log.verifyLogIsolation(LogPanic) {
 		return
 	}
@@ -318,7 +318,7 @@ func (log *GtcpLoggerCore) Panic(v ...interface{}) {
 	panic(s)
 }
 
-func (log *GtcpLoggerCore) Stack(v ...interface{}) {
+func (log *GrayLoggerCore) Stack(v ...interface{}) {
 	s := fmt.Sprint(v...)
 	s += "\n"
 	buf := make([]byte, LOG_MAX_BUF)
@@ -330,7 +330,7 @@ func (log *GtcpLoggerCore) Stack(v ...interface{}) {
 
 // Flags gets the current log bitmap flags
 // (获取当前日志bitmap标记)
-func (log *GtcpLoggerCore) Flags() int {
+func (log *GrayLoggerCore) Flags() int {
 	log.mu.Lock()
 	defer log.mu.Unlock()
 	return log.flag
@@ -338,7 +338,7 @@ func (log *GtcpLoggerCore) Flags() int {
 
 // ResetFlags resets the log Flags bitmap flags
 // (重新设置日志Flags bitMap 标记位)
-func (log *GtcpLoggerCore) ResetFlags(flag int) {
+func (log *GrayLoggerCore) ResetFlags(flag int) {
 	log.mu.Lock()
 	defer log.mu.Unlock()
 	log.flag = flag
@@ -346,7 +346,7 @@ func (log *GtcpLoggerCore) ResetFlags(flag int) {
 
 // AddFlag adds a flag to the bitmap flags
 // (添加flag标记)
-func (log *GtcpLoggerCore) AddFlag(flag int) {
+func (log *GrayLoggerCore) AddFlag(flag int) {
 	log.mu.Lock()
 	defer log.mu.Unlock()
 	log.flag |= flag
@@ -354,7 +354,7 @@ func (log *GtcpLoggerCore) AddFlag(flag int) {
 
 // SetPrefix sets a custom prefix for the log
 // (设置日志的 用户自定义前缀字符串)
-func (log *GtcpLoggerCore) SetPrefix(prefix string) {
+func (log *GrayLoggerCore) SetPrefix(prefix string) {
 	log.mu.Lock()
 	defer log.mu.Unlock()
 	log.prefix = prefix
@@ -362,7 +362,7 @@ func (log *GtcpLoggerCore) SetPrefix(prefix string) {
 
 // SetLogFile sets the log file output
 // (设置日志文件输出)
-func (log *GtcpLoggerCore) SetLogFile(fileDir string, fileName string) {
+func (log *GrayLoggerCore) SetLogFile(fileDir string, fileName string) {
 	if log.fw != nil {
 		log.fw.Close()
 	}
@@ -370,7 +370,7 @@ func (log *GtcpLoggerCore) SetLogFile(fileDir string, fileName string) {
 }
 
 // SetMaxAge 最大保留天数
-func (log *GtcpLoggerCore) SetMaxAge(ma int) {
+func (log *GrayLoggerCore) SetMaxAge(ma int) {
 	if log.fw == nil {
 		return
 	}
@@ -380,7 +380,7 @@ func (log *GtcpLoggerCore) SetMaxAge(ma int) {
 }
 
 // SetMaxSize 单个日志最大容量 单位：字节
-func (log *GtcpLoggerCore) SetMaxSize(ms int64) {
+func (log *GrayLoggerCore) SetMaxSize(ms int64) {
 	if log.fw == nil {
 		return
 	}
@@ -390,7 +390,7 @@ func (log *GtcpLoggerCore) SetMaxSize(ms int64) {
 }
 
 // SetCons 同时输出控制台
-func (log *GtcpLoggerCore) SetCons(b bool) {
+func (log *GrayLoggerCore) SetCons(b bool) {
 	if log.fw == nil {
 		return
 	}
@@ -401,13 +401,13 @@ func (log *GtcpLoggerCore) SetCons(b bool) {
 
 // Close the file associated with the log
 // (关闭日志绑定的文件)
-func (log *GtcpLoggerCore) closeFile() {
+func (log *GrayLoggerCore) closeFile() {
 	if log.fw != nil {
 		log.fw.Close()
 	}
 }
 
-func (log *GtcpLoggerCore) SetLogLevel(logLevel int) {
+func (log *GrayLoggerCore) SetLogLevel(logLevel int) {
 	log.isolationLevel = logLevel
 }
 

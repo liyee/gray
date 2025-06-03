@@ -4,9 +4,9 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/glog"
-	"github.com/liyee/gtcp/gutils"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/glog"
+	"github.com/liyee/gray/gutils"
 )
 
 type ConnManager struct {

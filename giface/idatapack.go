@@ -7,15 +7,15 @@ type IDataPack interface {
 }
 
 const (
-	// Gtcp standard packing and unpacking method (Gtcp 标准封包和拆包方式)
-	GtcpDataPack    string = "gtcp_pack_tlv_big_endian"
-	GtcpDataPackOld string = "gtcp_pack_ltv_little_endian"
+	// Gray standard packing and unpacking method (Gray 标准封包和拆包方式)
+	GrayDataPack    string = "gray_pack_tlv_big_endian"
+	GrayDataPackOld string = "gray_pack_ltv_little_endian"
 
 	//...(+)
 	//// Custom packing method can be added here(自定义封包方式在此添加)
 )
 
 const (
-	// Gtcp default standard message protocol format(Gtcp 默认标准报文协议格式)
-	GtcpMessage string = "gtcp_message"
+	// Gray default standard message protocol format(Gray 默认标准报文协议格式)
+	GrayMessage string = "gray_message"
 )

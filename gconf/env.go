@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	EnvConfigFilePathKey     = "GTCP_CONFIG_FILE_PATH"
-	EnvDefaultConfigFilePath = "conf/gtcp.json"
+	EnvConfigFilePathKey     = "GRAY_CONFIG_FILE_PATH"
+	EnvDefaultConfigFilePath = "conf/gray.json"
 )
 
 type gEnv struct {

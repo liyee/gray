@@ -11,11 +11,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/liyee/gtcp/gconf"
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/ginterceptor"
-	"github.com/liyee/gtcp/glog"
-	"github.com/liyee/gtcp/gpack"
+	"github.com/liyee/gray/gconf"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/ginterceptor"
+	"github.com/liyee/gray/glog"
+	"github.com/liyee/gray/gpack"
 
 	"github.com/gorilla/websocket"
 )
@@ -477,14 +477,14 @@ func (c *Connection) finalizer() {
 
 func (c *Connection) callOnConnStart() {
 	if c.onConnStart != nil {
-		glog.Ins().InfoF("GTCP CallOnConnStart....")
+		glog.Ins().InfoF("Gray CallOnConnStart....")
 		c.onConnStart(c)
 	}
 }
 
 func (c *Connection) callOnConnStop() {
 	if c.onConnStop != nil {
-		glog.Ins().InfoF("GTCP CallOnConnStop....")
+		glog.Ins().InfoF("Gray CallOnConnStop....")
 		c.onConnStop(c)
 	}
 }

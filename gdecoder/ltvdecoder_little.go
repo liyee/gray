@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"math"
 
-	"github.com/liyee/gtcp/giface"
+	"github.com/liyee/gray/giface"
 )
 
 const LTV_HEADER_SIZE = 8 //表示TLV空包长度

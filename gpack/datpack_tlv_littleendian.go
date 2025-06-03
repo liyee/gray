@@ -5,8 +5,8 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"github.com/liyee/gtcp/gconf"
-	"github.com/liyee/gtcp/giface"
+	"github.com/liyee/gray/gconf"
+	"github.com/liyee/gray/giface"
 )
 
 type DataPackLtv struct{}

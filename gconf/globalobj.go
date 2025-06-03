@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/liyee/gtcp/glog"
+	"github.com/liyee/gray/glog"
 )
 
 const (
@@ -138,7 +138,7 @@ func (c *Config) Show() {
 	objVal := reflect.ValueOf(c).Elem()
 	objType := reflect.TypeOf(*c)
 
-	fmt.Println("===== Gtcp Global Config =====")
+	fmt.Println("===== Gray Global Config =====")
 	for i := 0; i < objVal.NumField(); i++ {
 		field := objVal.Field(i)
 		typeField := objType.Field(i)
@@ -180,7 +180,7 @@ func init() {
 	// Initialize the GlobalObject variable and set some default values.
 	// (初始化GlobalObject变量，设置一些默认值)
 	GlobalObject = &Config{
-		Name:              "GtcpServerApp",
+		Name:              "GrayServerApp",
 		Version:           "V1.0",
 		TcpPort:           8999,
 		WsPort:            9000,

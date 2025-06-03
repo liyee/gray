@@ -10,11 +10,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/liyee/gtcp/gconf"
-	"github.com/liyee/gtcp/giface"
-	"github.com/liyee/gtcp/ginterceptor"
-	"github.com/liyee/gtcp/glog"
-	"github.com/liyee/gtcp/gpack"
+	"github.com/liyee/gray/gconf"
+	"github.com/liyee/gray/giface"
+	"github.com/liyee/gray/ginterceptor"
+	"github.com/liyee/gray/glog"
+	"github.com/liyee/gray/gpack"
 
 	"github.com/gorilla/websocket"
 	"github.com/xtaci/kcp-go"
@@ -532,14 +532,14 @@ func (c *KcpConnection) finalizer() {
 
 func (c *KcpConnection) callOnConnStart() {
 	if c.onConnStart != nil {
-		glog.Ins().DebugF("GTCP CallOnConnStart....")
+		glog.Ins().DebugF("Gray CallOnConnStart....")
 		c.onConnStart(c)
 	}
 }
 
 func (c *KcpConnection) callOnConnStop() {
 	if c.onConnStop != nil {
-		glog.Ins().DebugF("GTCP CallOnConnStop....")
+		glog.Ins().DebugF("Gray CallOnConnStop....")
 		c.onConnStop(c)
 	}
 }
