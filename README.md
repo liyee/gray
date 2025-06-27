@@ -1,2 +1,3 @@
 # gray
-A go language game framework
+Gray is an asynchronous network framework in Go language. During the development process, multiple network frameworks were referenced and combined with the actual needs of the project. The main modules include routing management, connection management, data packet encryption and decoding, heartbeat detection, log classification, etc. The module supports custom methods, such as data packet format, heartbeat method, etc.
+The framework supports multiple network protocols and integrates the commonly used network modules and functions in the game, which can be expanded and developed on this basis.
